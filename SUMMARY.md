@@ -7,9 +7,10 @@
 * [原子性](theory/atomicity.md)
 * [锁](theory/lock.md)
 * [微服务](theory/microservice.md)
-  
 
-* [代码中的监控日志](theory/monitor-logs.md)
+---
+
+* [代码中的监控日志](monitor-logs.md)
 
 ## 实践 <a id="practice"></a>
 
@@ -17,8 +18,8 @@
 
 ## 部署 <a id="deploy"></a>
 
-* [守护进程](ops/daemon.md)
-* [Kubernetes](ops/kubernetes.md)
+* [守护进程](deploy/daemon.md)
+* [Kubernetes1](deploy/kubernetes.md)
 
 ## Golang
 
@@ -27,3 +28,4 @@
 ---
 
 * [社区](https://github.com/nimoc/be/discussions)
+

@@ -251,6 +251,5 @@ function mutual(userID, friendUserID) {
 
 1. [go](https://github.com/nimoc/be/blob/master/practice/friends/go/internal/union.go)
 
+Github 评论: [https://github.com/nimoc/be/discussions/3](https://github.com/nimoc/be/discussions/3)
 
-
-Github 评论: https://github.com/nimoc/be/discussions/3

@@ -130,7 +130,7 @@ if (reply == nil) {
 
 ### 用户24小时只能领取2次礼品 <a id="24h-limit-2times"></a>
 
-```js
+```javascript
 // redis
 userID = 1
 key = "prize:" + ":"userID
@@ -145,15 +145,15 @@ local replyGet = redis.call("GET", key])
 local count = 0
 if (replyGet)
 then
-	-- 如果 key 存在 count 为读取的值
-	count = tonumber(replyGet)
+    -- 如果 key 存在 count 为读取的值
+    count = tonumber(replyGet)
 else
  -- 如果 key 不存在则 count 为 0
-	count = 0
+    count = 0
 end
 if (count >= max)
 then
-	return 0
+    return 0
 end
 if (!replyGet)
 then
@@ -172,6 +172,7 @@ if (replyInt == 1) {
 }
 ```
 
-当限制次数不是1次时就必须使用redis lua 脚本去执行,保证读取(GET)和写入(INCR)没有执行间隙
+当限制次数不是1次时就必须使用redis lua 脚本去执行,保证读取\(GET\)和写入\(INCR\)没有执行间隙
 
 ## 使用mysql锁实现扣除抽奖机会 <a id="mysql-lock"></a>
+

@@ -10,20 +10,19 @@
 
 ## var new
 
-
 通过代码记忆最为合适
 
-[var_new](./var_new_make/var_new/main.go)
+[var\_new](https://github.com/nimoc/be/tree/4f7a513425d41423310b747ec17a13fad2685e59/golang/var_new_make/var_new/main.go)
 
 ## var make slice array
 
-[var_make_slice_array](./var_new_make/var_make_slice_array/doc_test.go)
+[var\_make\_slice\_array](https://github.com/nimoc/be/tree/4f7a513425d41423310b747ec17a13fad2685e59/golang/var_new_make/var_make_slice_array/doc_test.go)
 
 ## var make map
 
-[var_make_map](./var_new_make/var_make_map/doc_test.go)
+[var\_make\_map](https://github.com/nimoc/be/tree/4f7a513425d41423310b747ec17a13fad2685e59/golang/var_new_make/var_make_map/doc_test.go)
 
 ## make chan
 
-[make_chan](./var_new_make/make_chan/main.go)
+[make\_chan](https://github.com/nimoc/be/tree/4f7a513425d41423310b747ec17a13fad2685e59/golang/var_new_make/make_chan/main.go)
 
