@@ -14,9 +14,9 @@
 
 ## 实践 <a id="practice"></a>
 
-* [好友关系1](practice/friends.md)
+* [好友关系](practice/friends.md)
 
-## 部署 <a id="deploy"></a>
+## 部署 <a id="ops"></a>
 
 * [守护进程](ops/daemon.md)
 * [Kubernetes](ops/k8s.md)
