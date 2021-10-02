@@ -1,7 +1,50 @@
-# 一天学会 Kubernetes
+# 新手友好的 Kubernetes 教程
 
+本页面是讲稿
 
-## 在腾讯云 TKE 安装 KubeSphere <a id="tke-ks-install"></a> 
+## 初学难点 <a id="difficulty"></a>
+
+1. 安装 
+
+2. yaml创建资源
+
+3. 负载均衡和网络
+
+### 安装<a id="install"></a>
+
+**minikube** k8s本机环境安装时候可能会遇到一些问题,WIndows/Mac 平台或多或少会遇到一些问题.并且学习k8s必须理解主机节点和网络相关知识,导致最终还是需要有一个真实的k8s环境.
+
+**k8s集群环境**的安装也有很多限制要求,也可能折腾了一整天才安装完成.
+
+所以建议使用云平台**一键安装按时付费**的k8s集群环境
+
+### yaml创建资源<a id="yaml-create"></a> 
+
+与 yaml 为主线来学习 k8s 对于新手入门不友好,记不住,写错配置都会产生挫败感.
+
+通过 kubesphere 直观的感受k8s,混个面熟之后再去了解 yaml 配置文件.
+
+### 负载均衡和网络 <a id="lb-net"></a> 
+
+k8s 在网络层面需要云服务商配合使用,很多教程在这方面一带而过,
+
+但是在生产环境使用k8s必须了解这些知识.
+
+*介绍 ingress 应用路由的官方文档*
+
+本教程会基于公有云平台使用负载均衡和应用路由,并使用NAT网关来控制节点统一IP
+
+## 腾讯云安装 TKE<a id="tke-install"></a> 
+
+*登录腾讯云安装 TKE 选择2台最低配置的节点,并提现工作环境最少3台节点每台2核4G.*
+
+### 腾讯云删除 TKE 集群<a id="tke-remove"></a> 
+
+当你不在使用集群时,记得删除集群以避免扣费
+
+## 安装 KubeSphere <a id="ks-install"></a> 
+
+https://kubesphere.io
 
 ```shell
 # 登录节点(替换ip为你的节点ip)
@@ -44,3 +87,8 @@ vim cluster-configuration.yaml
     openldapVolumeSize: 10Gi   # openldap PVC size.
     redisVolumSize: 10Gi # Redis PVC size.
 ```
+
+## 使用 Coding 发布镜像<a id="coding-docker"></a> 
+
+1. *演示Coding* 如何创建代码仓库和发布镜像
+2. 将 Docker 秘钥在 KubeSphere 上添加到 k8s中
