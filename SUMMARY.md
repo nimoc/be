@@ -18,8 +18,8 @@
 
 ## 部署 <a id="deploy"></a>
 
-* [守护进程](deploy/daemon.md)
-* [Kubernetes2](deploy/kubernetes.md)
+* [守护进程](ops/daemon.md)
+* [Kubernetes](ops/k8s.md)
 
 ## Golang
 
