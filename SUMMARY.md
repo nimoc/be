@@ -19,7 +19,7 @@
 ## 部署 <a id="ops"></a>
 
 * [守护进程](ops/daemon.md)
-* [Kubernetes](ops/k8s.md)
+* [新手友好的Kubernetes教程](ops/k8s.md)
 
 ## Golang
 

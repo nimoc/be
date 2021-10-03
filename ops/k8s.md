@@ -90,5 +90,66 @@ vim cluster-configuration.yaml
 
 ## 使用 Coding 发布镜像<a id="coding-docker"></a> 
 
-1. *演示Coding* 如何创建代码仓库和发布镜像
+1. *演示Coding* 如何创建代码仓库和发布镜像(代码直接导入github.com/)
 2. 将 Docker 秘钥在 KubeSphere 上添加到 k8s中
+
+
+
+## 部署应用<a id="deploy-app"></a> 
+
+Docker: 容器,我们的应用运行在容器中.**正方形**
+
+Volume: 磁盘卷,用于存储配置文件或数据文件
+
+Pod: 容器组,一个Pod可以有多个Docker
+
+Node: 节点(服务器),Node中可以有多个Pod
+
+*创建多个节点,说明节点在不同的节点上*
+
+## Service NodePort<a id="service-nodeport"></a> 
+
+>  NodePort 节点端口
+
+Service NodePort 使用 节点(服务器) 的端口作为入口供客户端访问应用
+
+****
+
+## Service Load Balancer<a id="service-lb"></a> 
+
+> Load Balancer 负载均衡
+
+负载均衡:为将**流量**(负载)**转发**(均衡)给应用
+
+## Service Ingress<a id="service-ingress"></a> 
+
+> Ingress 入口/应用路由
+
+文字语言都难以表达 Ingress 是什么,必须通过演示才能说明 Ingress 是什么.
+
+## ConfigMap<a id="config-map"></a> 
+
+基本上每个项目都会有配置文件,而配置文件在k8s中通过ConfigMap配置后挂载到应用中
+
+*说明有些场景如果不使用子路径会遇到坑*
+
+## Service ClusterIP<a id="service-cluster-ip"></a> 
+
+> ClusterIP 集群IP
+
+有些应用是只允许内网访问,此时可以使用 ClusterIP
+
+ *部署redis-dp和redis-svc,并说明生产环境建议使用云服务*
+
+
+
+## NAT 网关
+
+使用 k8s 后所有的不同的节点访问外网时IP是不同的,这不利于在一些第三方平台设置IP白名单.
+
+*通过在节点(服务器)运行 curl ip111.cn 演示IP是不同的*
+
+在腾讯云私有网络路由表 https://console.cloud.tencent.com/vpc/route 添加 NAT 网关
+
+*通过在节点(服务器)运行 curl ip111.cn 测试IP是相同的*
+
