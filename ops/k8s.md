@@ -1,4 +1,4 @@
-# 新手友好的 Kubernetes 教程
+# 不写代码的Kubernetes视频教程
 
 本页面是讲稿
 
