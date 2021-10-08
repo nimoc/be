@@ -71,6 +71,7 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 
 # 访问管理页面(替换ip为你的节点ip)
 http://20.205.243.166:30880
+# 用户名 admin 密码 P@88w0rd
 ```
 ```shell
 vim cluster-configuration.yaml
