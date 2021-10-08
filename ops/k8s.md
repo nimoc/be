@@ -3,7 +3,11 @@
 > 1. **摒弃复杂概念**,不是运维也能看懂的教程
 > 2. 只需了解简单的**表单操作**便可轻松部署项目
 
-本页面是讲稿
+Github讨论: https://github.com/nimoc/be/discussions/4
+
+> 本页面是讲稿
+
+<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=1" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 ## 初学难点 <a id="difficulty"></a>
 
@@ -39,6 +43,8 @@ k8s 在网络层面需要云服务商配合使用,很多教程在这方面一带
 
 ## 腾讯云安装 TKE<a id="tke-install"></a> 
 
+<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=2" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
 *登录腾讯云安装 TKE 选择2台最低配置的节点,并提现工作环境最少3台节点每台2核4G.*
 
 ### 腾讯云删除 TKE 集群<a id="tke-remove"></a> 
@@ -46,6 +52,8 @@ k8s 在网络层面需要云服务商配合使用,很多教程在这方面一带
 当你不在使用集群时,记得删除集群以避免扣费
 
 ## 安装 KubeSphere <a id="ks-install"></a> 
+
+<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=3" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 https://kubesphere.io
 
@@ -94,12 +102,16 @@ vim cluster-configuration.yaml
 
 ## 使用 Coding 发布镜像<a id="coding-docker"></a> 
 
-1. *演示Coding* 如何创建代码仓库和发布镜像(代码直接导入github.com/)
+<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=4" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+1. *演示Coding* 如何创建代码仓库和发布镜像(代码直接导入github.com/nimoc/echo)
 2. 将 Docker 秘钥在 KubeSphere 上添加到 k8s中
 
 
 
 ## 部署应用<a id="deploy-app"></a> 
+
+<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=5" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 Docker: 容器,我们的应用运行在容器中.**正方形**
 
@@ -111,7 +123,11 @@ Node: 节点(服务器),Node中可以有多个Pod
 
 *创建多个节点,说明节点在不同的节点上*
 
-## Service NodePort<a id="service-nodeport"></a> 
+## Service
+
+<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=6" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+## Service NodePort<a id="service-nodeport"></a>
 
 >  NodePort 节点端口
 
@@ -157,3 +173,7 @@ Service NodePort 使用 节点(服务器) 的端口作为入口供客户端访�
 
 *通过在节点(服务器)运行 curl ip111.cn 测试IP是相同的*
 
+
+## 总结
+
+<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=7" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
