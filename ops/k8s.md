@@ -7,11 +7,14 @@
 > 讲稿: https://be.nimo.run/ops/k8s
 > Github: https://github.com/nimoc/be/discussions/4
 
-课程介绍视频: https://www.bilibili.com/video/BV1cL4y167GV
+课程介绍视频:
+
+[点击播放 ![](k8s/banner.png)](https://www.bilibili.com/video/BV1cL4y167GV)
+
 
 ## 初学难点 <a id="difficulty"></a>
 
-1. 安装 
+1. 安装
 
 2. yaml创建资源
 
@@ -25,13 +28,13 @@
 
 所以建议使用云平台**一键安装按时付费**的k8s集群环境
 
-### yaml创建资源<a id="yaml-create"></a> 
+### yaml创建资源<a id="yaml-create"></a>
 
 与 yaml 为主线来学习 k8s 对于新手入门不友好,记不住,写错配置都会产生挫败感.
 
 通过 kubesphere 直观的感受k8s,混个面熟之后再去了解 yaml 配置文件.
 
-### 负载均衡和网络 <a id="lb-net"></a> 
+### 负载均衡和网络 <a id="lb-net"></a>
 
 k8s 在网络层面需要云服务商配合使用,很多教程在这方面一带而过,
 
@@ -41,7 +44,7 @@ k8s 在网络层面需要云服务商配合使用,很多教程在这方面一带
 
 本教程会基于公有云平台使用负载均衡和应用路由,并使用NAT网关来控制节点统一IP
 
-## 腾讯云安装 TKE<a id="tke-install"></a> 
+## 腾讯云安装 TKE<a id="tke-install"></a>
 
 
 安装k8s视频: https://www.bilibili.com/video/BV1cL4y167GV?p=2
@@ -49,11 +52,11 @@ k8s 在网络层面需要云服务商配合使用,很多教程在这方面一带
 
 *登录腾讯云安装 TKE 选择2台最低配置的节点,并提现工作环境最少3台节点每台2核4G.*
 
-### 腾讯云删除 TKE 集群<a id="tke-remove"></a> 
+### 腾讯云删除 TKE 集群<a id="tke-remove"></a>
 
 当你不在使用集群时,记得删除集群以避免扣费
 
-## 安装 KubeSphere <a id="ks-install"></a> 
+## 安装 KubeSphere <a id="ks-install"></a>
 
 安装k8s视频: https://www.bilibili.com/video/BV1cL4y167GV?p=3
 
@@ -102,7 +105,7 @@ vim cluster-configuration.yaml
     redisVolumSize: 10Gi # Redis PVC size.
 ```
 
-## 使用 Coding 发布镜像<a id="coding-docker"></a> 
+## 使用 Coding 发布镜像<a id="coding-docker"></a>
 
 使用coding发布镜像: https://www.bilibili.com/video/BV1cL4y167GV?p=4
 
@@ -111,7 +114,7 @@ vim cluster-configuration.yaml
 
 
 
-## 部署应用<a id="deploy-app"></a> 
+## 部署应用<a id="deploy-app"></a>
 
 
 部署应用视频: https://www.bilibili.com/video/BV1cL4y167GV?p=5
@@ -139,25 +142,25 @@ Service NodePort 使用 节点(服务器) 的端口作为入口供客户端访�
 
 ****
 
-## Service Load Balancer<a id="service-lb"></a> 
+## Service Load Balancer<a id="service-lb"></a>
 
 > Load Balancer 负载均衡
 
 负载均衡:为将**流量**(负载)**转发**(均衡)给应用
 
-## Service Ingress<a id="service-ingress"></a> 
+## Service Ingress<a id="service-ingress"></a>
 
 > Ingress 入口/应用路由
 
 文字语言都难以表达 Ingress 是什么,必须通过演示才能说明 Ingress 是什么.
 
-## ConfigMap<a id="config-map"></a> 
+## ConfigMap<a id="config-map"></a>
 
 基本上每个项目都会有配置文件,而配置文件在k8s中通过ConfigMap配置后挂载到应用中
 
 *说明有些场景如果不使用子路径会遇到坑*
 
-## Service ClusterIP<a id="service-cluster-ip"></a> 
+## Service ClusterIP<a id="service-cluster-ip"></a>
 
 > ClusterIP 集群IP
 
