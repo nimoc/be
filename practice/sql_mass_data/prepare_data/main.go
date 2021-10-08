@@ -32,19 +32,21 @@ func run () (err error) {
 	defer dbClose()
 	// 如果表不存在则创建表
 	_, err = db.Exec(ctx, `
-		CREATE TABLE IF NOT EXISTS mass_data (
+CREATE TABLE mass_data (
   id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   batch_id int(10) unsigned NOT NULL,
-  content varchar(20) NOT NULL DEFAULT '',
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  content varchar(20) NOT NULL,
+  PRIMARY KEY (id),
+  KEY bi (batch_id,id),
+  KEY ib (id,batch_id)
+) ENGINE=InnoDB AUTO_INCREMENT=10000001 DEFAULT CHARSET=utf8mb4;
 	`, nil,) ; if err != nil {
 						return
 					}
-	// 插入5个批次
-	for batchID := 1; batchID< 6; batchID++ {
-		// 每个批次插入5百万
-		for i := 0; i < 500; i++ {
+	// 插入一千五的数据
+	for insertCount := 1; insertCount< 3; insertCount++ {
+		// 共插入一千五
+		for i := 0; i < 1000; i++ {
 			var insertValues [][]interface{}
 			// 每次插入1万(根据实际数据库性能/数据库配置/插入列数决定)
 			rows := 10000
@@ -52,6 +54,10 @@ func run () (err error) {
 				var content []byte
 				content, err = xrand.BytesBySeed(xrand.Seed{}.Alphabet(), 10) ; if err != nil {
 					return
+				}
+				var batchID uint64
+				batchID, err = xrand.RangeUint64(1, 40) ; if err != nil {
+				    return
 				}
 				insertValues = append(insertValues, []interface{}{
 					batchID, content,
@@ -66,11 +72,6 @@ func run () (err error) {
 			}) ; if err != nil {
 				return
 			}
-			var count uint64
-			count, err = db.Count(ctx, sq.QB{From: sq.Table("mass_data", nil, nil)}) ; if err != nil {
-			    return
-			}
-			log.Print("count:", count)
 		}
 	}
 	return
