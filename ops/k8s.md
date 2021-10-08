@@ -3,11 +3,11 @@
 > 1. **摒弃复杂概念**,不是运维也能看懂的教程
 > 2. 只需了解简单的**表单操作**便可轻松部署项目
 
-Github讨论: https://github.com/nimoc/be/discussions/4
+> 本教程注重实践,如果只是看一遍不操作依然还是一学就会,一用就废.
+> 讲稿: https://be.nimo.run/ops/k8s
+> Github: https://github.com/nimoc/be/discussions/4
 
-> 本页面是讲稿
-
-<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=1" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+课程介绍视频: https://www.bilibili.com/video/BV1cL4y167GV
 
 ## 初学难点 <a id="difficulty"></a>
 
@@ -43,7 +43,9 @@ k8s 在网络层面需要云服务商配合使用,很多教程在这方面一带
 
 ## 腾讯云安装 TKE<a id="tke-install"></a> 
 
-<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=2" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+安装k8s视频: https://www.bilibili.com/video/BV1cL4y167GV?p=2
+
 
 *登录腾讯云安装 TKE 选择2台最低配置的节点,并提现工作环境最少3台节点每台2核4G.*
 
@@ -53,7 +55,7 @@ k8s 在网络层面需要云服务商配合使用,很多教程在这方面一带
 
 ## 安装 KubeSphere <a id="ks-install"></a> 
 
-<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=3" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+安装k8s视频: https://www.bilibili.com/video/BV1cL4y167GV?p=3
 
 https://kubesphere.io
 
@@ -102,7 +104,7 @@ vim cluster-configuration.yaml
 
 ## 使用 Coding 发布镜像<a id="coding-docker"></a> 
 
-<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=4" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+使用coding发布镜像: https://www.bilibili.com/video/BV1cL4y167GV?p=4
 
 1. *演示Coding* 如何创建代码仓库和发布镜像(代码直接导入github.com/nimoc/echo)
 2. 将 Docker 秘钥在 KubeSphere 上添加到 k8s中
@@ -111,7 +113,8 @@ vim cluster-configuration.yaml
 
 ## 部署应用<a id="deploy-app"></a> 
 
-<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=5" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+部署应用视频: https://www.bilibili.com/video/BV1cL4y167GV?p=5
 
 Docker: 容器,我们的应用运行在容器中.**正方形**
 
@@ -125,7 +128,8 @@ Node: 节点(服务器),Node中可以有多个Pod
 
 ## Service
 
-<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=6" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+Service和NAT网关视频: https://www.bilibili.com/video/BV1cL4y167GV?p=6
 
 ## Service NodePort<a id="service-nodeport"></a>
 
@@ -176,4 +180,8 @@ Service NodePort 使用 节点(服务器) 的端口作为入口供客户端访�
 
 ## 总结
 
-<iframe src="//player.bilibili.com/player.html?aid=848461706&bvid=BV1cL4y167GV&page=7" width="600" height="400" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+总结视频: https://www.bilibili.com/video/BV1cL4y167GV?p=7
+
+如果想深入了解 k8s 建议看杨波的教程:
+
+https://www.bilibili.com/video/BV1Ja4y1x748
