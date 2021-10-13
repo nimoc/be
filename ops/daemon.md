@@ -2,11 +2,9 @@
 
 > **守护进程**\(daemon\)是一类在后台运行的特殊**进程**，用于执行特定的系统任务。 很多**守护进程**在系统引导的时候启动，并且一直运行直到系统关闭。 另一些只在需要的时候才启动，完成任务后就自动结束。
 
-{% hint style="info" %}
-部署必须涉及具体的编程语言，为了便于演示本节选择易于部署的 go 语言。你也可以换成你熟悉的语言。
-{% endhint %}
+> 部署必须涉及具体的编程语言，为了便于演示本节选择易于部署的 go 语言。你也可以换成你熟悉的语言。
 
-{% code title="main.go" %}
+
 ```go
 /*
     你不需要看懂 main.go 文件， 你只需要知道程序启动后
@@ -37,15 +35,12 @@ func main() {
     log.Print(http.ListenAndServe(addr, nil))
 }
 ```
-{% endcode %}
 
 运行 `go build main.go` 编译生成 `./main` 文件。
 
 接下来只需要在终端运行`./main` 即可启动服务。
 
-{% hint style="info" %}
-当http端口被占用导致启动失败可以通过 lsof -i:端口 查看 PID 然后使用 kill+PID关闭序。
-{% endhint %}
+> 当http端口被占用导致启动失败可以通过 lsof -i:端口 查看 PID 然后使用 kill+PID关闭序。
 
 通过 `./main` 运行程序存在的问题有
 
@@ -84,9 +79,7 @@ pm2 delete demo
 pm2 monit
 ```
 
-{% hint style="info" %}
-不要使用 pm2 restart 数字 因为这样容易误操作，尽量使用 pm2 start name。
-{% endhint %}
+> 不要使用 pm2 restart 数字 因为这样容易误操作，尽量使用 pm2 start name。
 
 使用 pm2 start 之后即使关闭终端，程序依然在启动状态
 
@@ -118,7 +111,7 @@ pm2 save # 每次启动新进程都要运行
 
 pm2 supervisor 等项目只适合简单项目,复杂项目需要将同一份代码部署在多台机器,并且需要监控这些应用的状态.同时要确保运行环境一致. 为了做到这一条可以使用 kubernetes
 
-{% page-ref page="k8s.md" %}
+[k8s](./k8s.md)
 
 欢迎留言讨论： [https://github.com/nimoc/be/discussions/2](https://github.com/nimoc/be/discussions/2)
 
