@@ -12,11 +12,8 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
-参考下面的代码使用你自己熟悉的语言实现
-
-{% hint style="warning" %}
-不要着急立即开发，看完**练习**小结再开始开发
-{% endhint %}
+参考下面的代码使用你自己熟悉的语言实现 {
+> 不要着急立即开发，看完**练习**小结再开始开发
 
 ```lua
 // 因为目的是学习和练习，所以不需要写 http 代码
@@ -69,7 +66,7 @@ delete(1,2) //  "not friends"
 is(1,2) // false
 list(1) // 3
 cleartFriendUserData() // 清除关系数据
-add(1,2)
+add(1,2)}
 add(1,3)
 add(1,4)
 add(2,3)
@@ -106,11 +103,8 @@ CREATE TABLE `user_friend` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 ```
 
-{% hint style="info" %}
-接下来读写数据时候注意将 user\_id 和 friend\_user\_id 进行排序后操作
-{% endhint %}
+> 接下来读写数据时候注意将 user\_id 和 friend\_user\_id 进行排序后操作
 
-{% code title="伪代码" %}
 ```javascript
 function sortUserID(aid, bid) {
     if (aid < bid) {
@@ -179,7 +173,6 @@ function mutual(userID, friendUserID) {
          )
 }
 ```
-{% endcode %}
 
 只使用 sql 实现需要注意的有一下几点
 
@@ -195,7 +188,7 @@ function mutual(userID, friendUserID) {
 
 redis 的 sets 结构实现好友关系非常简单.注意使用 lua 保障多个操作是原子性即可
 
-{% code title="伪代码" %}
+
 ```lua
 function add(userID, friendUserID) {
     redis.call("SADD, userID, friendUserID)
@@ -216,7 +209,6 @@ function mutual(userID, friendUserID) {
     redis.call("SINTER", userID, friendUserID)
 }
 ```
-{% endcode %}
 
 注意 add 和 delete 都需要使用 lua 来满足原子性
 
