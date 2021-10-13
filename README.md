@@ -4,4 +4,3 @@
 
 使用伪代码的方式由浅入深的介绍后端技术
 
-![](./media/wechat-qrcode.png)
