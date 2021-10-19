@@ -84,24 +84,19 @@ kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=
 http://20.205.243.166:30880
 # 用户名 admin 密码 P@88w0rd
 ```
-```shell
-vim cluster-configuration.yaml
-//默认值
-  common:
-    mysqlVolumeSize: 20Gi # MySQL PVC size.
-    minioVolumeSize: 20Gi # Minio PVC size.
-    etcdVolumeSize: 20Gi  # etcd PVC size.
-    openldapVolumeSize: 2Gi   # openldap PVC size.
-    redisVolumSize: 2Gi # Redis PVC size.
 
-//修改后的值，PVC 为 10G 的倍数（1倍n倍都可以），其他可拔插组件如果开启也需要调整
-  common:
-    mysqlVolumeSize: 20Gi # MySQL PVC size.
-    minioVolumeSize: 20Gi # Minio PVC size.
-    etcdVolumeSize: 20Gi  # etcd PVC size.
-    openldapVolumeSize: 10Gi   # openldap PVC size.
-    redisVolumSize: 10Gi # Redis PVC size.
+> 一定要logs输出下面的提示再进行登录
+
+```shell
+#####################################################
+###              Welcome to KubeSphere!           ###
+#####################################################
+
+Console: http://172.17.0.11:30880
+Account: admin
+Password: P@88w0rd
 ```
+
 
 ## 使用 Coding 发布镜像<a id="coding-docker"></a>
 
