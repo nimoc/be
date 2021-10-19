@@ -13,7 +13,6 @@
 
 [点击播放 ![](k8s/banner.png)](https://www.bilibili.com/video/BV1cL4y167GV)
 
-
 ## 初学难点 <a id="difficulty"></a>
 
 1. 安装
@@ -72,11 +71,8 @@ ssh root@20.205.243.166
 # 安装KubeSphere
 kubectl apply -f  https://hub.fastgit.org/kubesphere/ks-installer/releases/download/v3.1.1/kubesphere-installer.yaml
 
-# 下载集群配置
-wget https://hub.fastgit.org/kubesphere/ks-installer/releases/download/v3.1.1/cluster-configuration.yaml
-
-# 修改集群配置文件，PVC 修改为 10G 的倍数
-vim cluster-configuration.yaml
+# 下载集群配置 (这个配置文件我已经修改过 pvc 10g 你可以不用修改了)
+wget https://hub.fastgit.org/nimoc/be/blob/master/ops/k8s/ks/v3.1.1/cluster-configuration.yaml
 
 # 应用配置
 kubectl apply -f cluster-configuration.yaml
