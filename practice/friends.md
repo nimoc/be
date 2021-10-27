@@ -15,7 +15,7 @@ CREATE TABLE `user` (
 参考下面的代码使用你自己熟悉的语言实现 {
 > 不要着急立即开发，看完**练习**小结再开始开发
 
-```lua
+```js
 // 因为目的是学习和练习，所以不需要写 http 代码
 // 也不需要写 session 等代码
 
@@ -50,7 +50,7 @@ function mutual(userID, friendUserID){
 
 按顺序调用如下代码
 
-```lua
+```js
 is(1,2) // false
 is(2,1) // false
 add(1,2) // ""
@@ -185,10 +185,10 @@ function mutual(userID, friendUserID) {
 
 ## 只用 redis <a id="redis"></a>
 
-redis 的 sets 结构实现好友关系非常简单.注意使用 lua 保障多个操作是原子性即可
+redis 的 sets 结构实现好友关系非常简单.注意使用 js 保障多个操作是原子性即可
 
 
-```lua
+```js
 function add(userID, friendUserID) {
     redis.call("SADD, userID, friendUserID)
     redis.call("SADD, friendUserID, userID)
@@ -209,7 +209,7 @@ function mutual(userID, friendUserID) {
 }
 ```
 
-注意 add 和 delete 都需要使用 lua 来满足原子性
+注意 add 和 delete 都需要使用 js 来满足原子性
 
 各个编程语言实现版本:
 
