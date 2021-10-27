@@ -1,31 +1,78 @@
-# Table of contents
-
-* [介绍](README.md)
-
-## 理论 <a id="theory"></a>
-
-* [原子性](theory/atomicity.md)
-* [锁](theory/lock.md)
-* [微服务](theory/microservice.md)
-
----
-
-* [代码中的监控日志](monitor-logs.md)
-
-## 实践 <a id="practice"></a>
-
-* [好友关系](practice/friends.md)
-
-## 部署 <a id="ops"></a>
-
-* [守护进程](ops/daemon.md)
-* [一个小时学会Kubernetes部署应用](ops/k8s.md)
-
-## Golang
-
-* [go 中 var new make 的区别](golang/var_new_make.md)
-
----
-
-* [社区](https://github.com/nimoc/be/discussions)
-
+<ul>
+	<li>
+		<a href="/README">
+			介绍
+		</a>
+	</li>
+</ul>
+<h2>
+	理论
+</h2>
+<ul>
+	<li>
+		<a href="/theory/atomicity">
+			原子性
+		</a>
+	</li>
+	<li>
+		<a href="/theory/lock">
+			锁
+		</a>
+	</li>
+	<li>
+		<a href="/theory/microservice">
+			微服务
+		</a>
+	</li>
+</ul>
+<hr/>
+<ul>
+	<li>
+		<a href="/monitor-logs">
+			代码中的监控日志
+		</a>
+	</li>
+</ul>
+<h2>
+	实践
+</h2>
+<ul>
+	<li>
+		<a href="/practice/friends">
+			好友关系
+		</a>
+	</li>
+</ul>
+<h2>
+	部署
+</h2>
+<ul>
+	<li>
+		<a href="/ops/daemon">
+			守护进程
+		</a>
+	</li>
+	<li>
+		<a href="/ops/k8s">
+			一个小时学会Kubernetes部署应用
+		</a>
+	</li>
+</ul>
+<h2>
+	Golang
+</h2>
+<ul>
+	<li>
+		<a href="/golang/var_new_make">
+			go 中 var new make 的区别
+		</a>
+	</li>
+</ul>
+<hr/>
+<ul>
+	<li>
+		<a href="https://github.com/nimoc/be/discussions">
+			社区
+		</a>
+	</li>
+</ul>
