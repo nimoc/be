@@ -1,3 +1,7 @@
+---
+permalink: /theory/friends/
+---
+
 # 好友关系
 
 ## 需求 <a id="spec"></a>

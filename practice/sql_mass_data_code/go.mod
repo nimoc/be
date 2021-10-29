@@ -1,4 +1,4 @@
-module github.com/nimoc/be/practice/sql_mass_data
+module github.com/nimoc/be/practice/sql_mass_data_code
 
 go 1.15
 

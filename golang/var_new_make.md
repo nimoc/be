@@ -1,3 +1,6 @@
+---
+permalink: /golang/var_new_make/
+---
 # go 中 var new make 的区别
 
 `var` 用于声明变量。

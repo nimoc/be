@@ -1,3 +1,6 @@
+---
+permalink: /theory/k8s/
+---
 # 一个小时学会Kubernetes部署应用
 
 ![](../media/k8s-wechat.jpg)
@@ -11,7 +14,7 @@
 
 课程介绍视频:
 
-[点击播放 ![](k8s/banner.png)](https://www.bilibili.com/video/BV1cL4y167GV)
+[点击播放 ![](k8s_file/banner.png)](https://www.bilibili.com/video/BV1cL4y167GV)
 
 ## 初学难点 <a id="difficulty"></a>
 
@@ -72,7 +75,7 @@ ssh root@20.205.243.166
 kubectl apply -f  https://hub.fastgit.org/kubesphere/ks-installer/releases/download/v3.1.1/kubesphere-installer.yaml
 
 # 下载集群配置 (这个配置文件我已经修改过 pvc 10g 你可以不用修改了)
-wget https://raw.fastgit.org/nimoc/be/master/ops/k8s/ks/v3.1.1/cluster-configuration.yaml
+wget https://raw.fastgit.org/nimoc/be/master/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml
 
 # 应用配置
 kubectl apply -f cluster-configuration.yaml

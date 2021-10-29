@@ -1,4 +1,4 @@
-module github.com/nimoc/be/practice/friends/go
+module github.com/nimoc/be/practice/friends_code/go
 
 go 1.15
 
