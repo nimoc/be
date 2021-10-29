@@ -1,5 +1,5 @@
 ---
-permalink: /ops/deamon/
+permalink: /ops/daemon/
 ---
 # 守护进程
 
