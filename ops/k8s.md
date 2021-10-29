@@ -1,5 +1,5 @@
 ---
-permalink: /theory/k8s/
+permalink: /ops/k8s/
 ---
 # 一个小时学会Kubernetes部署应用
 
