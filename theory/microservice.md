@@ -1,3 +1,7 @@
+---
+permalink: /theory/microservice/
+---
+
 # 微服务
 
 任何架构和开发方式都是基于需求演变而来的
