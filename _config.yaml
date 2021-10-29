@@ -1,6 +1,5 @@
 remote_theme: 2type/gitbook
 title: Nimo后端理论与实践
-collections:
-  pages:
-    output: true
-    permalink: /:name
+pages:
+  output: true
+  
