@@ -1,5 +1,5 @@
 ---
-permalink: /theory/friends/
+permalink: /practice/friends/
 ---
 
 # 好友关系
