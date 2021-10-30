@@ -73,19 +73,20 @@ ssh root@20.205.243.166
 
 # 因为 github 有时候很慢没所以我直接把配置文件上传到了 be.nimo.run
 # 安装KubeSphere
-kubectl apply -f  https://be.nimo.run/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml
+wget https://be.nimo.run/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml --no-check-certificate
+# 或者 wget https://raw.githubusercontent.com/nimoc/be/master/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml
+kubectl apply -f kubesphere-installer.yaml
 
 # 下载集群配置 (这个配置文件我已经修改过 pvc 10g 你可以不用修改了)
-wget https://be.nimo.run/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml
-
-# 应用配置
+wget https://be.nimo.run/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml --no-check-certificate
+# 或者 wget https://github.com/nimoc/be/blob/master/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml
 kubectl apply -f cluster-configuration.yaml
 
 # 查看安装情况
 kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l app=ks-install -o jsonpath='{.items[0].metadata.name}') -f
 
-# 访问管理页面(替换ip为你的节点ip)
-http://20.205.243.166:30880
+# 访问管理页面
+http://{你的节点公网IP}:30880
 # 用户名 admin 密码 P@88w0rd
 ```
 
