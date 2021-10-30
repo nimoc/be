@@ -28,7 +28,7 @@ permalink: /ops/k8s/
 
 3. 负载均衡和网络
 
-### 安装<a id="install"></a>
+### 安装 <a id="install"></a>
 
 **minikube** k8s本机环境安装时候可能会遇到一些问题,WIndows/Mac 平台或多或少会遇到一些问题.并且学习k8s必须理解主机节点和网络相关知识,导致最终还是需要有一个真实的k8s环境.
 
@@ -189,6 +189,5 @@ Service NodePort 使用 节点(服务器) 的端口作为入口供客户端访�
 如果想深入了解 k8s 建议看杨波的教程:
 
 https://www.bilibili.com/video/BV1Ja4y1x748
-
 
 ![](../media/k8s-wechat.jpg)
