@@ -71,12 +71,12 @@ https://kubesphere.io
 # 登录节点(替换ip为你的节点ip)
 ssh root@20.205.243.166
 
-# 如果 hub.fastgit.org 不能访问则换成 github.com
+# 因为 github 有时候很慢没所以我直接把配置文件上传到了 be.nimo.run
 # 安装KubeSphere
-kubectl apply -f  https://hub.fastgit.org/kubesphere/ks-installer/releases/download/v3.1.1/kubesphere-installer.yaml
+kubectl apply -f  https://be.nimo.run/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml
 
 # 下载集群配置 (这个配置文件我已经修改过 pvc 10g 你可以不用修改了)
-wget https://raw.fastgit.org/nimoc/be/master/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml
+wget https://be.nimo.run/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml
 
 # 应用配置
 kubectl apply -f cluster-configuration.yaml
@@ -185,3 +185,6 @@ Service NodePort 使用 节点(服务器) 的端口作为入口供客户端访�
 如果想深入了解 k8s 建议看杨波的教程:
 
 https://www.bilibili.com/video/BV1Ja4y1x748
+
+
+![](../media/k8s-wechat.jpg)
