@@ -1,13 +1,13 @@
 ---
 permalink: /ops/k8s/
 ---
-1. **[点击链接加微信群](../media/k8s-wechat.jpg)**
-2. [安装 KubeSphere](#ks-install)
-
-
-
 # 一个小时学会Kubernetes部署应用
 
+
+**快速跳转:**
+
+1. [加微信群](../media/k8s-wechat.jpg)
+2. [安装 KubeSphere 命令](#ks-install)
 
 > 1. **摒弃复杂概念**,不是运维也能看懂的教程
 > 2. 只需了解简单的**表单操作**便可轻松部署项目
