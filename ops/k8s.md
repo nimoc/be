@@ -175,11 +175,9 @@ Service NodePort 使用 节点(服务器) 的端口作为入口供客户端访�
 
 使用 k8s 后所有的不同的节点访问外网时IP是不同的,这不利于在一些第三方平台设置IP白名单.
 
-*通过在节点(服务器)运行 curl ip111.cn 演示IP是不同的*
-
 在腾讯云私有网络路由表 https://console.cloud.tencent.com/vpc/route 添加 NAT 网关
 
-*通过在节点(服务器)运行 curl ip111.cn 测试IP是相同的*
+*通过在节点(服务器)运行 `curl https://httpbin.org/ip` 演示IP是不同的*
 
 
 ## 总结
