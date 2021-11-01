@@ -76,12 +76,12 @@ ssh root@20.205.243.166
 
 # 因为 github 有时候很慢没所以我直接把配置文件上传到了 be.nimo.run
 # 安装KubeSphere
-wget https://be.nimo.run/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml --no-check-certificate
+wget https://nimoc.gitee.io/be/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml 
 # 或者 wget https://raw.githubusercontent.com/nimoc/be/master/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml
 kubectl apply -f kubesphere-installer.yaml
 
 # 下载集群配置 (这个配置文件我已经修改过 pvc 10g 你可以不用修改了)
-wget https://be.nimo.run/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml --no-check-certificate
+wget https://nimoc.gitee.io/be/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml
 # 或者 wget https://github.com/nimoc/be/blob/master/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml
 kubectl apply -f cluster-configuration.yaml
 
