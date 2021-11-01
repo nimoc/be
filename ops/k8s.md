@@ -71,19 +71,28 @@ k8s 在网络层面需要云服务商配合使用,很多教程在这方面一带
 
 https://kubesphere.io
 
+<div style="color:red">在腾讯云新建kunernetes 集群的版本一定要选择 1.18.4,选择其他版本可能会导致 kubesphere 无法安装</div>
+
 ```shell
 # 登录节点(替换ip为你的节点ip)
 ssh root@20.205.243.166
 
 # 因为 github 有时候很慢没所以我直接把配置文件上传到了 be.nimo.run
 # 安装KubeSphere
-wget https://nimoc.gitee.io/be/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml 
-# 或者 wget https://raw.githubusercontent.com/nimoc/be/master/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml
+wget https://nimoc.gitee.io/be/ops/k8s_file/ks/v3.1.1/kubesphere-installer.yaml
+# 如果 wget 一直无法成功,你可以
+# 1. 直接访问上面的url 
+# 2. 复制内容
+# 3. 在终端输入 vi kubesphere-installer.yaml (记得用 vi 不要用 vim)
+# 4. 在终端输入 i 进入编辑模式
+# 5. 粘贴
+# 6. 输入 :wq
+# 7. 回车   
+ 
 kubectl apply -f kubesphere-installer.yaml
 
 # 下载集群配置 (这个配置文件我已经修改过 pvc 10g 你可以不用修改了)
 wget https://nimoc.gitee.io/be/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml
-# 或者 wget https://github.com/nimoc/be/blob/master/ops/k8s_file/ks/v3.1.1/cluster-configuration.yaml
 kubectl apply -f cluster-configuration.yaml
 
 # 查看安装情况

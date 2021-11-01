@@ -91,7 +91,7 @@ spec:
     store:
       enabled: false # Enable or disable the KubeSphere App Store.
   servicemesh:         # (0.3 Core, 300 MiB) Provide fine-grained traffic management, observability and tracing, and visualized traffic topology.
-    enabled: true     # Base component (pilot). Enable or disable KubeSphere Service Mesh (Istio-based).
+    enabled: false     # Base component (pilot). Enable or disable KubeSphere Service Mesh (Istio-based).
   kubeedge:          # Add edge nodes to your cluster and deploy workloads on edge nodes.
     enabled: false   # Enable or disable KubeEdge.
     cloudCore:
