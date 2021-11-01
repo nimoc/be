@@ -3,6 +3,7 @@ permalink: /ops/k8s/
 ---
 # 一个小时学会Kubernetes部署应用
 
+<div style="color:red">在腾讯云新建kunernetes 集群的版本一定要选择 1.18.4,选择其他版本可能会导致 kubesphere 无法安装</div>
 
 **快速跳转:**
 
