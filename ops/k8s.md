@@ -9,6 +9,7 @@ permalink: /ops/k8s/
 
 1. [加微信群](../media/k8s-wechat.jpg)
 2. [安装 KubeSphere 命令](#ks-install)
+3. [理论知识](http://gk.link/a/10DJb)
 
 > 1. **摒弃复杂概念**,不是运维也能看懂的教程
 > 2. 只需了解简单的**表单操作**便可轻松部署项目
@@ -181,7 +182,7 @@ Service NodePort 使用 节点(服务器) 的端口作为入口供客户端访�
 
 
 
-## NAT 网关
+## NAT 网关<a id="nat"></a>
 
 使用 k8s 后所有的不同的节点访问外网时IP是不同的,这不利于在一些第三方平台设置IP白名单.
 
@@ -194,8 +195,12 @@ Service NodePort 使用 节点(服务器) 的端口作为入口供客户端访�
 
 总结视频: https://www.bilibili.com/video/BV1cL4y167GV?p=7
 
-如果想深入了解 k8s 建议看杨波的教程:
+# 理论知识 <a id="theory"></a>
 
-https://www.bilibili.com/video/BV1Ja4y1x748
+[![](../media/k8s-time-class.jpeg)](http://gk.link/a/10DJb)
+
+
+
+
 
 ![](../media/k8s-wechat.jpg)
