@@ -1,3 +1,7 @@
+---
+permalink: /theory/database/
+---
+    
 # 可靠性
 
 ## 硬件故障
