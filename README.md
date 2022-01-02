@@ -4,3 +4,8 @@
 
 1. 在线文档: [be.nimo.run](https://be.nimo.run)
 2. 在线视频: [https://space.bilibili.com/252027563](https://space.bilibili.com/252027563)
+
+参考书籍:
+
+1. [数据密集型应用系统设计
+   ](https://book.douban.com/subject/30329536/)
