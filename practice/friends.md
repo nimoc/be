@@ -185,7 +185,7 @@ function mutual(userID, friendUserID) {
 
 各个编程语言实现版本:
 
-1. [go](https://github.com/nimoc/be/blob/master/practice/friends/go/internal/mysql.go)
+1. Golang: [实现](./friends_code/go/internal/mysql.go) [运行](./friends_code/go/internal/mysql_test.go) 
 
 ## 只用 redis <a id="redis"></a>
 
@@ -217,7 +217,7 @@ function mutual(userID, friendUserID) {
 
 各个编程语言实现版本:
 
-1. [go](https://github.com/nimoc/be/blob/master/practice/friends/go/internal/redis.go)
+1. Golang: [实现](./friends_code/go/internal/redis.go) [运行](./friends_code/go/internal/redis_test.go)
 
 ## mysql + redis <a id="mysql-redis"></a>
 
@@ -244,6 +244,6 @@ function mutual(userID, friendUserID) {
 
 各个编程语言实现版本:
 
-1. [go](https://github.com/nimoc/be/blob/master/practice/friends/go/internal/union.go)
+1. Golang: [实现](./friends_code/go/internal/union.go) [运行](./friends_code/go/internal/union_test.go)
 
 Github 评论: [https://github.com/nimoc/be/discussions/3](https://github.com/nimoc/be/discussions/3)
