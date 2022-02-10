@@ -1,5 +1,5 @@
 ---
-permalink: /theory/right-concept
+permalink: /theory/right-concept/
 ---
 
 # 直达正确的概念
