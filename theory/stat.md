@@ -20,7 +20,7 @@ CREATE TABLE `mkt_record` (
     `mkt_id` bigint(20) unsigned NOT NULL,
     `user_id` bigint(20) NOT NULL,
     `kind` tinyint(4) unsigned NOT NULL,
-    // 注解:C
+    -- 注解:C
     `is_uv` tinyint(4) unsigned NOT NULL COMMENT 'Unique Visitors',
     `is_ue` tinyint(4) unsigned NOT NULL COMMENT 'Unique Exposure',
     `date` date NOT NULL,
@@ -91,6 +91,8 @@ function createMKTRecord(userID, mktID, kind) {
 > 如果要满足判断uv和插入数据的原子性,可以通过开启sql事务,然后向一张复合主键为 `date,user_id,mkt_id,is_uv` 的表通过 `INSERT IGNORE INTO` 的方式插入数据,
 > 如果sql执行返回的受影响行数是1.则is_uv 为 true,否则为 false.
 > 然后再向 `mkt_record` 表插入数据.
+> 不过这种方式没有redis hsetnx 性能高,性能和数据一致性你可以进行实际业务情况做取舍.
+> 多嘴提一句一般情况下此处的redis sql 不满足原子性是极小概率才会出现的.
 
 **注解:C**
 `mkt_record` 表有 `is_uv` 和 `is_ue` 字段.如果没有这两个字段在一天结束时也能分析出有多少 uv 和 ue.但是这需要使用 sql 的
