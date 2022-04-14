@@ -15,19 +15,20 @@ permalink: /theory/stat/
 创建记录表:
 
 ```sql
-// 注解:E
-// 注解:F
 CREATE TABLE `mkt_record` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `mkt_id` bigint(20) unsigned NOT NULL,
     `user_id` bigint(20) NOT NULL,
     `kind` tinyint(4) unsigned NOT NULL,
+    // 注解:C
     `is_uv` tinyint(4) unsigned NOT NULL COMMENT 'Unique Visitors',
     `is_ue` tinyint(4) unsigned NOT NULL COMMENT 'Unique Exposure',
     `date` date NOT NULL,
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
+    -- 注解:E
     KEY `user_id` (`user_id`),
+    -- 注解:F
     KEY `date__mkt_id__kind` (`date`,`mkt_id`,`kind`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 ```
@@ -65,7 +66,6 @@ function createMKTRecord(userID, mktID, kind) {
     if (hsetIsUEReply == 1) {
         isUE = true
     }
-    // 注解:C
     // 注解:D
     sql(`
     INSERT INTO mkt_record (mkt_id, user_id, kind, is_uv, is_ue, date)
@@ -124,4 +124,4 @@ TODO...
 
 ## 统计精度
 
-TODO... 时间精度,范围进度
+TODO... 时间(日/分钟)精度,范围(平台)精度,
