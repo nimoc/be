@@ -52,7 +52,7 @@ function createMKTRecord(userID, mktID, kind) {
     // 注解:A
     // 注解:B
     // 通过 redis 获知本次操作是不是uv
-    hsetIsUVReply = reids(`HSETNX mkt:is_uv:${date} ${userID}-200 1`)
+    hsetIsUVReply = reids(`HSETNX mkt:is_uv:${date} ${userID}-${mktID} 1`)
     // HSETNX mkt:is_uv:2022-01-01 100-200 1
     // key: mkt:is_uv:2022-01-01
     // field: 100-200
@@ -62,7 +62,7 @@ function createMKTRecord(userID, mktID, kind) {
     }
     
     // 通过 redis 获知本次操作是不是ue
-    hsetIsUEReply = reids(`HSETNX mkt:is_ue:${date} ${userID}-200 1`)
+    hsetIsUEReply = reids(`HSETNX mkt:is_ue:${date} ${userID}-${mktID} 1`)
     if (hsetIsUEReply == 1) {
         isUE = true
     }
