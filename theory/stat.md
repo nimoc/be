@@ -19,7 +19,7 @@ CREATE TABLE `mkt_record` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
     `mkt_id` bigint(20) unsigned NOT NULL,
     `user_id` bigint(20) NOT NULL,
-    `kind` tinyint(4) unsigned NOT NULL,
+    `type` tinyint(4) unsigned NOT NULL,
     -- 注解:C
     `is_uv` tinyint(4) unsigned NOT NULL COMMENT 'Unique Visitors',
     `is_ue` tinyint(4) unsigned NOT NULL COMMENT 'Unique Exposure',
@@ -29,17 +29,17 @@ CREATE TABLE `mkt_record` (
     -- 注解:E
     KEY `user_id` (`user_id`),
     -- 注解:F
-    KEY `date__mkt_id__kind` (`date`,`mkt_id`,`kind`)
+    KEY `date__mkt_id` (`date`,`mkt_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 ```
 
 ```js
 // 创建广告记录
-function createMKTRecord(userID, mktID, kind) {
+function createMKTRecord(userID, mktID, type) {
     // userID = 100
     // mktID  = 200
-    // kind = 曝光 exposure 
-    // kind = 访问 visit
+    // type = 曝光 exposure 
+    // type = 访问 visit
     
     /* 此处省略入参格式与入参数据真实性校验 */
     
@@ -68,20 +68,20 @@ function createMKTRecord(userID, mktID, kind) {
     }
     // 注解:D
     sql(`
-    INSERT INTO mkt_record (mkt_id, user_id, kind, is_uv, is_ue, date)
+    INSERT INTO mkt_record (mkt_id, user_id, type, is_uv, is_ue, date)
     VALUES
 	(?, ?, ?, ?, ?, ?,);
-    `, mktID, userID, kind, isUV, isUE, date)
+    `, mktID, userID, type, isUV, isUE, date)
 }
 ```
 
-**注解:A**
+### 注解:A
 
 使用 hsetnx 而不是 setnx 的原因是:
 1. key的前缀 `mkt:is_ue:${date}` 在一天内不会改变,使用 hashes 比 stirngs 存储更节省空间
 2. hsetnx 无需设置key过期时间,使用定时脚本在每日凌晨1点执行 `del mkt:is_ue:${三天前日期}` 即可 (删除三天前的 key 而不是昨天是为了万一出现bug方便排查) 
 
-**注解:B**
+### 注解:B
 
 使用 redis 判断 uv或者ue 之后进行sql插入操作这个行为不满足原子性,
 当 redis 设置成功之后有可能进程中断或者sql网络连接异常.
@@ -94,25 +94,67 @@ function createMKTRecord(userID, mktID, kind) {
 > 不过这种方式没有redis hsetnx 性能高,性能和数据一致性你可以进行实际业务情况做取舍.
 > 多嘴提一句一般情况下此处的redis sql 不满足原子性是极小概率才会出现的.
 
-**注解:C**
+### 注解:C
 `mkt_record` 表有 `is_uv` 和 `is_ue` 字段.如果没有这两个字段在一天结束时也能分析出有多少 uv 和 ue.但是这需要使用 sql 的
 查询分组 `GROUP BY` 或者 字段去重`distinct`, 但是这样做性能差. 
 
 在创建数据的时候即时计算出冗余字段 `is_uv` `is_ue` 能提高统计性能.并且业务上其他的逻辑可能也需要即时计算出 `is_uv` `is_ue` 
 
 
-**注解:D**
+### 注解:D
 
 `mkt_record` 表在已经有 `create_time` 字段保存时间的情况下,特意增加了 `date` 字段.目的是为了统计的查询性能.
 这是一种增加合理冗余字段并作为索引的数据设计和性能优化的技巧.
 
-**注解:E**
+### 注解:E
 
 `mkt_record` 表有 `user_id` 索引的原因是因为基于实践经验,在业务上经常会使用  `WHERE user_id = ?` 查找 `record` 表的数据,这样做能提高查询性能.
 
-**注解:F**
+### 注解:F
 
-`mkt_record` 表 有`date`,`mkt_id`,`kind` 的复合索引的原因是统计分析sql会使用到 `WHERE date = ? AND mkt_id = ? AND kind = ?`,建立索引能提高统计性能. 
+`mkt_record` 表 有`date,mkt_id`的复合索引的原因是统计分析sql会使用到 `WHERE date = ? AND mkt_id = ? AND type = ?`,建立索引能提高统计性能.
+
+#### 索引数量
+
+索引使用 `date,mkt_id` 而不是 `date,mkt_id,type` 的原因是 type 的只有 1 和 2 ,并且1比2多很多(因为业务场景决定了广告曝光比广告访问多).
+
+在 type 有很多种类型,并且每个类型的数据量级差不多.可以考虑将索引设为 `date,mkt_id,type`
+
+需要注意的是,索引越多插入数据越慢.运行 [stat_code/go/insert_data.main.go](./stat_code/go/insert_data/main.go) 向无索引和有索引的表插入时会发现速度不一样.
+
+#### 索引顺序
+
+索引使用 `date,mkt_id` 而不是 `mkt_id,date` 的原因是:
+单独使用`WHERE date = ?` 比 单独使用`WHERE mkt_id = ?`的次数多,
+索引的顺序决定了查询速度,将经常单独查询的字段在索引中靠前能提高查询速度.
+
+使用`mkt_id,date` 索引时候索引空间的数据排列
+
+```
+// WHERE mkt_id = 282348 的查询速度快
+// WHERE   date = "2022-01-01" 的查询速度慢,因为要"跳行" 
+282348,2022-01-01
+282348,2022-01-02
+282348,2022-01-01
+341515,2022-01-01
+341515,2022-01-02
+341515,2022-01-03
+```
+
+
+使用`date,mkt_id` 索引时候索引空间的数据排列
+
+```
+// WHERE   date = "2022-01-01" 的查询速度快
+// WHERE mkt_id = 282348 的查询速度慢,因为要"跳行"
+2022-01-01,282348
+2022-01-01,341515
+2022-01-02,282348
+2022-01-02,341515
+2022-01-03,282348
+2022-01-03,341515
+```
+
 
 至此我们完成的广告原始记录的伪代码
 
