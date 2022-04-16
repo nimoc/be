@@ -31,7 +31,8 @@ func run() (err error) {
 	var values [][]interface{}
 	var column []sq.Column
 	mktIDSeed := uintSeed(1, 500)     // 500个广告
-	userIDSeed := uintSeed(1, 100000) // 十万个用户
+	var userIDSeedCursor uint = 1
+	userIDSeed := uintSeed(userIDSeedCursor, userIDSeedCursor+100000) // 十万个用户
 	mockRedis := struct {
 		IsUV map[string]bool
 		IsUE map[string]bool
@@ -41,10 +42,14 @@ func run() (err error) {
 	}
 	for i := 0; i < 10000; i++ {
 		log.Print("insert batch:", i)
+		// 递增user_id种子游标,让数据更真实
+		userIDSeedCursor += uint(i)
+		userIDSeed = uintSeed(userIDSeedCursor, userIDSeedCursor+100000) // 十万个用户
 		for j := 0; j < 9000; j++ {
 			mktID := xtest.PickOne(mktIDSeed)
 			userID := xtest.PickOne(userIDSeed)
-			kind := xtest.PickOne([]uint8{1,1,1,1,1, 2}) // 1 exposure 2 visit
+
+			recordType := xtest.PickOne([]uint8{1,1,1,1,1, 2}) // 1 exposure 2 visit
 			createTime := time.
 				Date(2022, 1, 1, 0, 0, 0, 0, time.Local).
 				AddDate(0, 0, i/100)
@@ -53,13 +58,13 @@ func run() (err error) {
 			isUE := false
 			// mock redis setnx
 			setKey := date + ":" + strconv.FormatUint(uint64(userID), 10)
-			if kind == 1 {
+			if recordType == 1 {
 				if _, ok := mockRedis.IsUV[setKey]; !ok {
 					mockRedis.IsUV[setKey] = true
 					isUV = true
 				}
 			}
-			if kind == 2  {
+			if recordType == 2  {
 				if _, ok := mockRedis.IsUE[setKey]; !ok {
 					mockRedis.IsUE[setKey] = true
 					isUE = true
@@ -67,9 +72,9 @@ func run() (err error) {
 			}
 			// 故意在啊循环中一直设置 column,目的是为了在测试环境便于对照 values
 			column = []sq.Column{
-				"mkt_id", "user_id", "kind", "is_uv", "is_ue", "date", "create_time"}
+				"mkt_id", "user_id", "type", "is_uv", "is_ue", "date", "create_time"}
 			values = append(values, []interface{}{
-				mktID, userID, kind, isUV, isUE, date, createTime,
+				mktID, userID, recordType, isUV, isUE, date, createTime,
 			})
 		}
 		_, err = db.Insert(ctx, sq.QB{
