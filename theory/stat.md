@@ -8,6 +8,12 @@ permalink: /theory/stat/
 
 我们以一个广告统计例子,由浅入深的介绍统计
 
+需求: 用户访问网站或应用会显示广告,显示广告的行为是曝光 `exposure`,用户点击广告的行为是访问 `visit`.
+**一天**内**一个用户**相对于**一个广告**发生的**第一次曝光**属于**独立曝光** `is_ue`.
+**一天**内**一个用户**相对于**一个广告**发生的**第一次访问**属于**独立访问** `is_uv`.
+
+要区分独立曝光和独立访问的原因是:业务层面以独立曝光和独立访问进行结算
+
 ## 原始记录
 
 > 使用 market mkt 代替 ad 表示广告,因为某些浏览器插件会拦截包含 ad 的HTTP请求和链接
@@ -17,19 +23,19 @@ permalink: /theory/stat/
 ```sql
 CREATE TABLE `mkt_record` (
     `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-    `mkt_id` bigint(20) unsigned NOT NULL,
-    `user_id` bigint(20) NOT NULL,
+    `mkt_id` int(11) unsigned NOT NULL,
+    `user_id` int(11) unsigned NOT NULL,
     `type` tinyint(4) unsigned NOT NULL,
     -- 注解:C
-    `is_uv` tinyint(4) unsigned NOT NULL COMMENT 'Unique Visitors',
-    `is_ue` tinyint(4) unsigned NOT NULL COMMENT 'Unique Exposure',
+    `is_uv` tinyint(4) unsigned NOT NULL COMMENT '独立访问',
+    `is_ue` tinyint(4) unsigned NOT NULL COMMENT '独立曝光',
     `date` date NOT NULL,
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     -- 注解:E
     KEY `user_id` (`user_id`),
     -- 注解:F
-    KEY `date__mkt_id` (`date`,`mkt_id`)
+    KEY `date__mkt_id__type` (`date`,`mkt_id`,`type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 ```
 
@@ -75,6 +81,7 @@ function createMKTRecord(userID, mktID, type) {
 }
 ```
 
+
 ### 注解:A
 
 使用 hsetnx 而不是 setnx 的原因是:
@@ -95,11 +102,11 @@ function createMKTRecord(userID, mktID, type) {
 > 多嘴提一句一般情况下此处的redis sql 不满足原子性是极小概率才会出现的.
 
 ### 注解:C
+
 `mkt_record` 表有 `is_uv` 和 `is_ue` 字段.如果没有这两个字段在一天结束时也能分析出有多少 uv 和 ue.但是这需要使用 sql 的
-查询分组 `GROUP BY` 或者 字段去重`distinct`, 但是这样做性能差. 
+查询分组 `GROUP BY user_id` 或者 字段去重`count(distinct user_id)`, 但是这样做性能没有使用 `WHERE is_uv = 1` 查询的方式高. 
 
-在创建数据的时候即时计算出冗余字段 `is_uv` `is_ue` 能提高统计性能.并且业务上其他的逻辑可能也需要即时计算出 `is_uv` `is_ue` 
-
+所以在创建数据的时候即时计算出冗余字段 `is_uv` `is_ue` 能提高统计性能,最重要的是业务上其他的逻辑可能也需要即时计算出 `is_uv` `is_ue`
 
 ### 注解:D
 
@@ -114,18 +121,19 @@ function createMKTRecord(userID, mktID, type) {
 
 `mkt_record` 表 有`date,mkt_id,kind`的复合索引的原因是统计分析sql会使用到 `WHERE date = ? AND mkt_id = ? AND type = ?`,建立索引能提高统计性能.
 
-需要注意的是,索引越多插入数据越慢.运行 [stat_code/go/insert_data.main.go](./stat_code/go/insert_data/main.go) 向无索引和有索引的表插入时会发现速度不一样.
+需要注意的是,索引越多插入数据越慢.向无索引和有索引的表插入时会发现速度不一样.
 
+### 代码实现
+
+1. [Go 插入数据](./stat_code/go/insert_data/main.go)
 
 至此我们完成的广告原始记录的伪代码
 
 ## 统计分析每日数据
 
-TODO...
 
 ## 即时计数提高性能
 
-TODO...
 
 ## 统计精度
 
