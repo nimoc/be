@@ -11,6 +11,7 @@ import (
 )
 import "github.com/goclub/sql"
 
+// 文档地址: https://be.nimo.run/theory/stat
 func main() {
 	xerr.PrintStack(run())
 }
