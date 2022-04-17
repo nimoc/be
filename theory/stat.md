@@ -132,7 +132,177 @@ function createMKTRecord(userID, mktID, type) {
 ## 统计分析每日数据
 
 
-## 即时计数提高性能
+新手可能解决统计需求时会使用 SQL group by 直接查询数据.
+
+例如查询某广告最近一周的UV总和:
+
+```sql
+select count(*) from mkt_record
+where date between "2022-01-01" and "2022-01-07"
+and mkt_id = 100
+and type   = 1
+and is_uv  = 1
+```
+
+在每日产生100万数据的表中,虽然这个查询用上了索引 `date__mkt_id__type`,但是查询速度还是很慢.一亿的数据需要耗时3.5s.
+
+例如查询某广告最近一周UV的每日数据:
+
+```sql
+select date, count(date) as "uv" from mkt_record
+where date between "2022-01-01" and "2022-01-07"
+and mkt_id = 100
+and type   = 1
+and is_uv  = 1
+group by date
+```
+
+在每日产生100万数据的表中,查询速度1.8秒.
+
+
+
+**查询结果**
+
+```
+date	uv
+2022-01-01	174
+2022-01-02	217
+2022-01-03	214
+2022-01-04	255
+2022-01-05	264
+2022-01-06	277
+2022-01-07	309
+```
+
+> 使用SQL在数据量大的详细数据记录表中进行统计分析会很慢,可以采用每日凌晨生成数据日表的方式将查询结果提前准备好.在需要查询的时候直接查询数据日表**
+> 这种拆分统计保存日表再查询日表得到统计结果的方式是一种很常见的统计实现技巧.
+
+可以在每日凌晨1点生成昨日广告数据
+
+**曝光**
+
+```sql
+select count(*) as "曝光:exposure" from mkt_record
+where 
+    date = "2022-01-01"
+    and mkt_id = 1
+    and type = 1
+```
+
+***独立曝光*
+
+```sql
+select count(*) as "独立曝光:unique_exposure" from mkt_record
+where 
+    date = "2022-01-01"
+    and mkt_id = 10
+    and type   = 1
+    and is_uv  = 1
+```
+
+**访问**
+
+```sql
+select count(*) as "访问:visit" from mkt_record
+where 
+    date = "2022-01-01"
+    and mkt_id = 10
+    and type = 2
+```
+
+**独立访问**
+
+```sql
+select count(*) as "独立访问:unique_visit" from mkt_record
+where 
+    date = "2022-01-01"
+    and mkt_id = 10
+    and type   = 2
+    and is_ue  = 1
+```
+
+在每日产生一百万条数据,总数据量一亿,平均每个广告一天产生2000条数据的情况下.
+查询利用了索引 `date__mkt_id__type`, 查询速度很快.
+
+然后就可以将查询出的数据存储到广告日统计表中
+
+```sql
+CREATE TABLE `mkt_stat_of_date` (
+  `date` date NOT NULL,
+  `mkt_id` int(11) unsigned NOT NULL,
+  `exposure` int(11) unsigned NOT NULL,
+  `ue` int(11) unsigned NOT NULL,
+  `visit` int(10) unsigned NOT NULL,
+  `uv` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`date`,`mkt_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+```sql
+INSERT INTO `mkt_stat_of_date` (`date`, `mkt_id`, `exposure`, `ue`, `visit`, `uv`)
+VALUES
+	('2022-01-01', 100, 8, 4, 6, 2);
+```
+
+主键使用`date,mkt_id`作为复合主键,这样能保证不会出现2份相同日期相同广告ID的数据/
+
+> 插入主键重复数据的数据会报错 Duplicate entry '2022-01-01-100' for key 'PRIMARY'
+> 可以使用 `INSERT IGNORE INTO` 插入数据避免报错,并检查SQL执行完成后返回的受影响行数是否为1判断插入是否成功
+
+
+有了广告日统计表查询最近7天综合和最近7天每日数据
+
+
+**最近一周某广告uv总和**
+
+```sql
+select sum(uv) from mkt_stat_of_date
+where date between "2022-01-01" and "2022-01-07"
+and mkt_id = 100
+```
+
+
+**最近一周某广告每日uv**
+
+```sql
+select date, uv from mkt_stat_of_date
+where date between "2022-01-01" and "2022-01-07"
+and mkt_id = 100
+```
+
+在业务规模流量小,不需要实时展示uv的情况下.
+每日凌晨1点查出日统计数据并存储到广告日统计表的方式易于实现且性能高.
+
+## 即时计数统计
+
+一旦每日广告记录数据流达到十万百万时.即使使用了缓存,查询速度也不一定会很快.
+
+提高统计性能常用的方式就是分摊压力,将展示数据统计结果那一刻的查询压力提前消化.
+
+在产生广告曝光访问行为时进行计数递增,这样统计压力就均摊到了每一次的用户请求中.
+不用担心每日数据量太多导致统计日表无法生成.
+
+> 你可能在第一次实现统计的时候就使用了计数统计,这很不错.但也请一定将用户行为保存到 `mkt_record` 中吗.
+> 因为随着可能会有新的统计需求时需要对原始数据进行分析,也可能是需要将详细数据展示给用户.
+
+mysql 和 redis 都能实现计数递增的功能,方法分别是
+
+**redis**
+```lua
+HINCRBY uv:counter:${date} ${mktID} 1
+```
+**mysql**
+```sql
+update mkt_uv_counter_of_date
+set uv = uv + 1
+where 
+    date       = "2022-01-01"
+    and mkt_id = 100
+```
+
+接下来我分析一下各自的优劣点:
+
+TOOD...
 
 
 ## 统计精度
