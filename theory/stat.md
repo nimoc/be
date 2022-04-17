@@ -370,8 +370,43 @@ redis接收到递增计数命名时会在内存中递增,先响应成功.在一�
 
 接下来我列出伪代码:
 
+redis:
 ```js
-
+function createMKTRecordRedis(userID, mktID, type) {
+    isUV = false
+    isUE = false
+    date = NewDate() // 2022-01-01
+    var evalReply = redisEval(`
+        -- HSETNX mkt:is_uv:${date} ${userID}-${mktID}   
+        local hsetReply = redis.call("HSETNX", KEYS[1], KEYS[2], 1)
+        if hsetReply == 1 then
+            -- HINCRBY mkt:uv:${date} ${mktID} 1
+            redis.call("HINCRBY", KEYS[3], KEYS[5], 1)
+            return 1
+        end
+        -- HINCRBY mkt:visit:${date} ${mktID} 1
+        redis.call("HINCRBY", KEYS[4], KEYS[5], 1)
+        return 0
+    `,
+    {
+        KEYS: [
+            /* 1 */ `mkt:is_uv:${date}`,
+            /* 2 */ `${userID}-${mktID}`,
+            /* 3 */ `mkt:uv:${date}`,
+            /* 4 */ `mkt:visit:${date}`,
+            /* 5 */ mktID,
+        ]
+    })
+    var isUV = evalReply == 1
+    
+    // 为了易于理解省略 ue 判断和递增的代码
+    
+    sql(`
+    INSERT INTO mkt_record (mkt_id, user_id, type, is_uv, is_ue, date)
+    VALUES
+	(?, ?, ?, ?, ?, ?,);
+    `, mktID, userID, type, isUV, isUE, date)
+}
 ```
 
 
@@ -383,3 +418,7 @@ TODO... 时间(日/分钟)精度,范围(平台)精度,
 ## 更多信息
 
 TODO... 地理位置
+
+## elastic-search
+
+TODO 用 elasti-search 通过简单的方式实现一个复杂的统计  
