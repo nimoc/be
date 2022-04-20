@@ -125,6 +125,6 @@ func init() {
 		User:     "root",
 		Password: "somepass",
 	}.FormatDSN()); if err != nil {
-		return
+		panic(err)
 	}
 }
