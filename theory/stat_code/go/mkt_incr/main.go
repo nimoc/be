@@ -18,36 +18,36 @@ func main() {
 
 // 如果先取消表的索引插入数据,速度会快很多
 func run() (err error) {
-	// var visit uint8 = 1
-	// var exposure uint8 = 2
-	// testData := []struct {
-	// 	userID     uint32
-	// 	mktID      uint32
-	// 	recordType uint8
-	// }{
-	// 	{1, 101, exposure},
-	// 	{1, 101, visit},
-	//
-	// 	{2, 101, exposure},
-	// 	{2, 102, exposure},
-	//
-	// 	{3, 101, exposure},
-	// 	{3, 102, visit},
-	//
-	// 	{4, 102, exposure},
-	// 	{4, 102, visit},
-	// }
-	// for _, datum := range testData {
-	// 	err = createMKTRecordRedis(datum.userID, datum.mktID, datum.recordType); if err != nil {
-	// 		xerr.PrintStack(err)
-	// 	}
-	// }
-
-	// 每日凌晨1点将redis中的数据合计存储到sql中
-	yesterday := xtime.FormatChinaDate(time.Now()) // 应查前一天数据，因为示例演示查刚插入的数据
-	err = cronCreateMKTRecordOfDay(yesterday); if err != nil {
-		return
+	var visit uint8 = 1
+	var exposure uint8 = 2
+	testData := []struct {
+		userID     uint32
+		mktID      uint32
+		recordType uint8
+	}{
+		{1, 101, exposure},
+		{1, 101, visit},
+	
+		{2, 101, exposure},
+		{2, 102, exposure},
+	
+		{3, 101, exposure},
+		{3, 102, visit},
+	
+		{4, 102, exposure},
+		{4, 102, visit},
 	}
+	for _, datum := range testData {
+		err = createMKTRecordRedis(datum.userID, datum.mktID, datum.recordType); if err != nil {
+			xerr.PrintStack(err)
+		}
+	}
+
+	// // 每日凌晨1点将redis中的数据合计存储到sql中
+	// yesterday := xtime.FormatChinaDate(time.Now()) // 应查前一天数据，因为示例演示查刚插入的数据
+	// err = cronCreateMKTRecordOfDay(yesterday); if err != nil {
+	// 	return
+	// }
 	return
 }
 
