@@ -27,13 +27,13 @@ func run() (err error) {
 	}{
 		{1, 101, exposure},
 		{1, 101, visit},
-	
+
 		{2, 101, exposure},
 		{2, 102, exposure},
-	
+
 		{3, 101, exposure},
 		{3, 102, visit},
-	
+
 		{4, 102, exposure},
 		{4, 102, visit},
 	}
@@ -43,11 +43,11 @@ func run() (err error) {
 		}
 	}
 
-	// // 每日凌晨1点将redis中的数据合计存储到sql中
-	// yesterday := xtime.FormatChinaDate(time.Now()) // 应查前一天数据，因为示例演示查刚插入的数据
-	// err = cronCreateMKTRecordOfDay(yesterday); if err != nil {
-	// 	return
-	// }
+	// 每日凌晨1点将redis中的数据合计存储到sql中
+	yesterday := xtime.FormatChinaDate(time.Now()) // 应查前一天数据，因为示例演示查刚插入的数据
+	err = cronCreateMKTRecordOfDay(yesterday); if err != nil {
+		return
+	}
 	return
 }
 
@@ -133,12 +133,118 @@ func createMKTRecordRedis(userID uint32, mktID uint32, recordType uint8) (err er
 	}); if err != nil {
 		return
 	}
+
 	return
 }
 
 // 每日凌晨1点将redis中的数据通过 HGETALL 读取出来存储到 mysql 的 mkt_stat_of_date 表中. 随后删除redis中对应的数据
 func cronCreateMKTRecordOfDay(targetDate string) (err error) {
-	// todo
+	ctx := context.Background()
+	type stat struct{
+		Exposure uint64
+		UE       uint64
+		Visit    uint64
+		UV       uint64
+	}
+	list := map[uint32]stat{}
+
+	// "mkt:uv:2022-04-19"
+	err = cronCreateMKTRecordOfDayCore(ctx, "mkt:uv:" + targetDate, func(mktID uint32, value uint64) {
+		if _,ok:=list[mktID];ok==false{
+			list[mktID] = stat{}
+		}else{
+			item := list[mktID]
+			item.UV = value
+			list[mktID] = item
+		}
+	}); if err != nil {
+		return
+	}
+	// "mkt:visit:2022-04-19"
+	err = cronCreateMKTRecordOfDayCore(ctx, "mkt:visit:" + targetDate, func(mktID uint32, value uint64) {
+		if _,ok:=list[mktID];ok==false{
+			list[mktID] = stat{}
+		}else{
+			item := list[mktID]
+			item.Visit = value
+			list[mktID] = item
+		}
+	}); if err != nil {
+		return
+	}
+	// "mkt:exposure:2022-04-19"
+	err = cronCreateMKTRecordOfDayCore(ctx, "mkt:exposure:" + targetDate, func(mktID uint32, value uint64) {
+		if _,ok:=list[mktID];ok==false{
+			list[mktID] = stat{}
+		}else{
+			item := list[mktID]
+			item.Exposure = value
+			list[mktID] = item
+		}
+	}); if err != nil {
+		return
+	}
+	// "mkt:ue:2022-04-19"
+	err = cronCreateMKTRecordOfDayCore(ctx, "mkt:ue:" + targetDate, func(mktID uint32, value uint64) {
+		if _,ok:=list[mktID];ok==false{
+			list[mktID] = stat{}
+		}else{
+			item := list[mktID]
+			item.UE = value
+			list[mktID] = item
+		}
+	}); if err != nil {
+		return
+	}
+	// 遍历存储数据
+	sqlValueList := [][]interface{}{}
+	for mktID, item := range list {
+		sqlValueList = append(sqlValueList, []interface{}{
+			targetDate, mktID, item.Exposure, item.UE, item.Visit, item.UV,
+		})
+	}
+	_, err = db.Insert(ctx, sq.QB{
+		From:                sq.Table("mkt_stat_of_date", nil, nil),
+		InsertMultiple:      sq.InsertMultiple{
+			Column: []sq.Column{
+				`date`, `mkt_id`, `exposure`, `ue`, `visit`, `uv`,
+			},
+			Values: sqlValueList,
+		},
+		UseInsertIgnoreInto: true,
+	}); if err != nil {
+		return
+	}
+	// 删除3天以前的数据，留3天内数据以便观测
+	threeDayBefore := xtime.FormatChinaDate(time.Now().AddDate(0,0,-4))
+	_, err = redisClient.DoIntegerReplyWithoutNil(ctx, []string{
+		"DEL",
+		"mkt:is_ue:"+threeDayBefore,
+		"mkt:exposure:"+threeDayBefore,
+		"mkt:ue:"+threeDayBefore,
+		"mkt:is_uv:"+threeDayBefore,
+		"mkt:visit:"+threeDayBefore,
+		"mkt:uv:"+threeDayBefore,
+	}); if err != nil {
+		return
+	}
+	return
+}
+func cronCreateMKTRecordOfDayCore(ctx context.Context, redisField string,  handleItem func(mktID uint32, value uint64))(err error){
+	var reply []red.OptionInt64
+	reply, err = redisClient.DoArrayIntegerReply(ctx, []string{"HGETALL", redisField}); if err != nil {
+		return
+	}
+	var mktID uint32
+	for i, optionInt64 := range reply {
+		var isKey bool
+		if i%2 == 0 { isKey = true }
+		if isKey {
+			mktID = uint32(optionInt64.Int64)
+		}else{
+			handleItem(mktID, uint64(optionInt64.Int64))
+		}
+	}
 	return
 }
 
