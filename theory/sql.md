@@ -4,6 +4,56 @@ permalink: /theory/sql/
 
 # sql
 
+## 数据竞争 <a id="data-race"></a>
+
+在产生高并发时会产生数据竞争,数据竞争会导致数据不一致.
+
+递增
+
+```sql
+CREATE TABLE `data_race_incr` (
+  `user_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `count` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+```sql
+INSERT INTO `data_race_incr` (`user_id`, `count`)
+VALUES
+	(100, 0);
+```
+
+```js
+var userID = 100
+var data = sql("SELECT count FROM data_race_incr WHERE user_id = ? LIMIT 1", userID)
+var newCount = data.count + 1
+sql("UPDATE data_race_incr SET count = ? WHERE user_id = ? LIMIT 1", newCount, userID)
+```
+
+
+A请求和B请求的时间表:
+
+|时间| A操作    | B操作    |
+|---|--------|--------|
+|t1| SELECT |        |
+|t2|        | SELECT |
+|t3|        | UPDATE |
+|t4|UPDATE|        |
+
+`SELECT` 和 `UPDATE` 之间有执行间隙,如果A请求执行了`SELECT` 但未执行到 `UPDATE`时 B请求已经执行完了 `SELECT` 和 `UPDATE`.
+之后当A请求执行完UPDATE时数据库中 userID 100 的 count 是2,而不是2.
+
+使用原子性的操作消除执行间隙就可以避免数据竞争
+
+```sql
+UPDATE data_race_incr SET count = count + 1 WHERE user_id = 100 LIMIT 1
+```
+
+----
+
+你通过锻炼和思考学会分析代码是否存在数据竞争,并使用本节的知识来避免数据竞争
+
 ## 幂等性 <a id="idempotent"></a>
 
 
@@ -14,7 +64,7 @@ permalink: /theory/sql/
 1.`PRIMARY KEY` 和 `UNIQUE` 的唯一约束
 2.`INSERT IGNORE INTO`
 
-### 业务场景: 判断UV
+###  判断UV
 
 ```sql
 CREATE TABLE `idempotent_uv` (
@@ -42,8 +92,7 @@ VALUES
 
 > 对数据一致性要求没有那么高的场景可以使用 redis 判断uv
 
-
-### 业务场景: 订单号
+###  订单号
 
 微信支付和支付宝支付的支付接口都要求每次请求支付时提交一个商户订单号`out_trade_no`,作用是防止重复提交.
 
@@ -118,6 +167,100 @@ SET out_trade_no = "a"
 WHERE id = 1
 ```
 
+## 乐观锁 CAS  <a id="cas"></a>
+
+> CAS 是 compare and swap 的缩写(比较并交换)
+> [Wiki百科](https://zh.wikipedia.org/zh-hans/%E6%AF%94%E8%BE%83%E5%B9%B6%E4%BA%A4%E6%8D%A2)
+
+在SQL中比较是 `WHERE`,交换是 `SET`.
+
+### 企业认证审核
+
+```sql
+CREATE TABLE `cas_ company _auth` (
+  `user_id` int(11) unsigned NOT NULL,
+  `status` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+```sql
+INSERT INTO `cas_company_auth` (`user_id`, `status`)
+VALUES
+	(100, 1);
+```
+
+```sql
+UPDATE `cas_company_auth` 
+SET status = 2 -- 通过
+WHERE status = 1 AND user_id = 100
+-- status 1 待审核 2 通过 3 拒绝
+```
+
+获取SQL执行返回的`rows affected`,如果返回 `1` 则表示修改成功,如果返回 `0` 则表示修改失败.
+
+### 库存扣减
+
+```sql
+CREATE TABLE `cas_ inventory` (
+    `sku_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `inventory` int(11) unsigned NOT NULL COMMENT '剩余库存',
+    `cost` int(11) unsigned NOT NULL COMMENT '出库数量',
+    PRIMARY KEY (`sku_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+```sql
+INSERT INTO `cas_inventory` (`sku_id`, `inventory`, `cost`)
+VALUES
+	(100, 5, 0);
+```
+
+业务需求是下单时 减少 `inventory` 增加 `cost`,当 `inventory` 为 0 时不修改数据
+
+````sql
+-- 用户下单购买2件 sku_id 为 100 的商品
+UPDATE 
+	`cas_inventory` 
+SET 
+	 `inventory` = `inventory` - 2
+	,`cost` = `cost` + 2
+WHERE 
+		sku_id = 100
+	AND inventory > 2
+LIMIT 1
+````
+
+SQL执行后返回的`rows affected` 为 `1` 则下单成功,为 `0` 则库存不足下单失败.
+
+如果 `WHERE` 条件的库存比较部分是 `inventory - 2 >= 0` 会导致报错 `BIGINT UNSIGNED value is out of range in '(`be`.`cas_inventory`.`inventory` - 2)'`,
+ 减法运算后 inventory 的值变成了负数, 而 inventory 字段是 `unsigned`.不允许出现负数.
+
+
+**错误的SQL:**
+
+```sql
+-- 错误的SQL
+UPDATE 
+	`cas_inventory` 
+SET 
+	 `inventory` = `inventory` - 2
+	,`cost` = `cost` + 2
+WHERE 
+		sku_id = 100
+	AND inventory - 2 >= 0
+	-- 当 inventory > 2时候会报错
+    -- BIGINT UNSIGNED value is out of range in '(`be`.`cas_inventory`.`inventory` - 2)'
+LIMIT 1
+```
+
+---
+
+乐观锁CAS是高并发利器,实现简单且高性能.应该尽量使用乐观锁而不是[#tx-lock](事务锁).
+
+基于乐观锁还能实现[#queue](高并发队列)
+
+## 事务原子性 <a id="tx-atomicity"></a> 
 
 ## 事务锁 <a id="tx-lock"></a>
 
@@ -130,3 +273,4 @@ WHERE id = 1
 
 
 
+## 高并发队列 <a id="queue"></a>
