@@ -227,7 +227,7 @@ SET
 	,`cost` = `cost` + 2
 WHERE 
 		sku_id = 100
-	AND inventory > 2
+	AND inventory >= 2
 LIMIT 1
 ````
 
