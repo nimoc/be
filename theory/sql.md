@@ -177,7 +177,7 @@ WHERE id = 1
 ### 企业认证审核
 
 ```sql
-CREATE TABLE `cas_ company _auth` (
+CREATE TABLE `cas_company _auth` (
   `user_id` int(11) unsigned NOT NULL,
   `status` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`user_id`)

@@ -10,7 +10,6 @@ import (
 )
 
 func TestNewMysqlFriends(t *testing.T) {
-
 	f, err := NewMysqlFriend() ; assert.NoError(t, err)
 	ctx := context.Background()
 	FriendTest(t, f, FriendTestCycle{
