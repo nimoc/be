@@ -241,3 +241,81 @@ LIMIT 1
 ```
 
 执行3次sql只有前2次成功扣除.最后一次明明余额还有1却无法扣款.
+
+## 财务记录
+
+财务的变更的同时应当保存变更记录,便于排查问题和展示给用户.
+
+### 表结构
+
+    CREATE TABLE `account_finance_record` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    `account_id` bigint(20) unsigned NOT NULL,
+    `amount` bigint(20) unsigned NOT NULL,
+    `type` tinyint(4) unsigned NOT NULL,
+    `ref_type` tinyint(4) unsigned NOT NULL,
+    `ref_value` char(24) NOT NULL DEFAULT '',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=356749 DEFAULT CHARSET=utf8mb4;
+
+
+### amount
+变更金额,单位分
+
+### type
+变更类型
+
+| 值   | 说明        | 对应的数据变化                                |
+|-----|-----------|----------------------------------------|
+| `1` | 收入 income | balance = balance + ?                  |
+| `2` | 支出 expend | balance = balance - ?, cost = cost + ? |
+| `3` | 退款 refund | balance = balance + ?, cost = cost - ? |
+
+### ref_type & ref_value
+来源信息
+
+> 非必须字段,可根据业务情况决定是否需要.主要用于排查问题追查金额来源
+
+
+| ref_value | 说明          | ref_value                                   | 场景               |
+|-----------|-------------|---------------------------------------------|------------------|
+| `1`       | 充值 recharge | `100` 充值订单sql表主键id                          | 用户通过微信支付宝充值金额到账户 |
+| `2`       | 抽奖 lottery  | `200` 抽奖记录表主键id                             | 用户参与活动抽奖并中奖      |
+| `3`       | 提现 withdraw | `5349b4ddd2781d08c09890f4`  提现订单mongo集合主键id | 用户提现余额到微信或支付宝    |
+
+
+### 示例
+
+```
+// 记录用户 1 收入 2 元. 来源于充值,充值订单id 100
+insert({
+    account_id: 1,
+    type: 1,
+    amount: 200,
+    ref_type: 1,
+    ref_value:intToString(100),
+})
+```
+
+```
+// 记录用户 1 收入 2 元.来源于抽奖,抽奖记录表id 200
+insert({
+    account_id: 1,
+    type: 1,
+    amount: 200,
+    ref_type: 2,
+    ref_value:intToString(200),
+})
+```
+
+```
+// 记录用户 1 支出 2 元. 来源于提现,提现mongo id 5349b4ddd2781d08c09890f4
+insert({
+    account_id: 1,
+    type: 2,
+    amount: 200,
+    ref_type: 3,
+    ref_value:"5349b4ddd2781d08c09890f4",
+})
+```
