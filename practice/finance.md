@@ -1,3 +1,7 @@
+---
+permalink: /practice/finance/
+---
+
 # 财务
 
 
