@@ -15,17 +15,18 @@ permalink: /golang/var_new_make/
 
 通过代码记忆最为合适
 
-[var\_new](https://github.com/nimoc/be/tree/4f7a513425d41423310b747ec17a13fad2685e59/golang/var_new_make/var_new/main.go)
+[var\_new](./var_new_make_code/var_new/main.go?embed)
+
 
 ## var make slice array
 
-[var\_make\_slice\_array](https://github.com/nimoc/be/tree/4f7a513425d41423310b747ec17a13fad2685e59/golang/var_new_make/var_make_slice_array/doc_test.go)
+[var\_make\_slice\_array](./var_new_make_code/var_make_slice_array/doc_test.go?embed)
 
 ## var make map
 
-[var\_make\_map](https://github.com/nimoc/be/tree/4f7a513425d41423310b747ec17a13fad2685e59/golang/var_new_make/var_make_map/doc_test.go)
+[var\_make\_map](./var_new_make_code/var_make_map/doc_test.go?embed)
 
 ## make chan
 
-[make\_chan](https://github.com/nimoc/be/tree/4f7a513425d41423310b747ec17a13fad2685e59/golang/var_new_make/make_chan/main.go)
+[make\_chan](./var_new_make_code/make_chan/main.go?embed)
 

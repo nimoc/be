@@ -244,6 +244,6 @@ function mutual(userID, friendUserID) {
 
 各个编程语言实现版本:
 
-1. Golang: [实现](./friends_code/go/internal/union.go) [运行](./friends_code/go/internal/union_test.go)
+1. Golang: [实现](./friends_code/go/internal/union.go?embed) [运行](./friends_code/go/internal/union_test.go?embed)
 
 Github 评论: [https://github.com/nimoc/be/discussions/3](https://github.com/nimoc/be/discussions/3)

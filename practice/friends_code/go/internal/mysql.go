@@ -20,7 +20,7 @@ type MysqlConfig struct {
 func NewMysqlFriend () (*MysqlFriend, error) {
 	config := MysqlConfig{}
 
-	data, err := ioutil.ReadFile(path.Join(os.Getenv("GOPATH"), "src/github.com/nimoc/backend/practice/friends/go/env.yaml")) ; if err != nil {
+	data, err := ioutil.ReadFile(path.Join(os.Getenv("GOPATH"), "src/github.com/nimoc/be/practice/friends_code/go/env.yaml")) ; if err != nil {
 	    return nil, err
 	}
 	err = yaml.Unmarshal(data, &config) ; if err != nil {

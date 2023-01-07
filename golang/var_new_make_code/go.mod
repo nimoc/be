@@ -1,4 +1,4 @@
-module github.com/nimoc/be/golang/var_new_make_file
+module github.com/nimoc/be/golang/var_new_make_code
 
 go 1.15
 
