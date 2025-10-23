@@ -47,6 +47,19 @@ system.url-prefix: http://你的域名.com
 # 如果没有域名就配置为 htt://你的ip:9000
 #system.url-prefix: http://你的域名.com
 ```
+```
+vim sentry/sentry.conf.py
+```
+修改
+```
+CSRF_TRUSTED_ORIGINS = ["https://example.com", "http://127.0.0.1:9000"]
+```
+
+重启
+
+```
+docker-compose down && docker-compose up -d
+```
 
 ## 5. 启动服务
 ```bash
